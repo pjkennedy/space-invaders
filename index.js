@@ -70,7 +70,33 @@ class Player {
     } //update()
 } // player() class
 
+class Projectile {
+    constructor({ position, velocity }) {
+        this.position = position
+        this.velocity = velocity
+
+        this.radius = 3
+    }
+
+    draw() {
+        c.beginPath()
+        c.arc(this.position.x, this.position.y, 
+            this.radius, 0, Math.PI * 2)
+        c.fillStyle = 'red'
+        c.fill()
+        c.closePath()
+    }
+
+    update() {
+        this.draw()
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+    }
+}
+
+
 const player = new Player()
+const projectiles = []
 
 player.update()
 
@@ -93,7 +119,15 @@ function animate() {
     c.fillStyle = 'black'
     c.fillRect(0, 0, canvas.width, canvas.height) 
     player.update()
-    //console.log("it is: ", keys.a.pressed)
+    projectiles.forEach((projectile, index) => {
+        if (projectile.position.y + projectile.radius <= 0) {
+            setTimeout(() => {
+                projectiles.splice(index, 1)
+            }, 0)
+        } else {
+            projectile.update()
+        }
+    })
     
     if (keys.ArrowLeft.pressed && player.position.x >= 0 ) {
         player.velocity.x = -7
@@ -121,8 +155,19 @@ addEventListener('keydown', ({key}) => {
             keys.ArrowRight.pressed = true
             break
         case ' ':
-            console.log('space')
-            keys.space = true
+            //console.log('space')
+            projectiles.push(
+                new Projectile({
+                    position: { 
+                        x: player.position.x + player.width / 2, 
+                        y: player.position.y },
+                    velocity: {
+                        x: 0,
+                        y: -10
+                    }
+                }))
+            //keys.space = true
+            //console.log(projectiles)
             break
     }
 })
@@ -139,7 +184,7 @@ addEventListener('keyup', ( {key}) => {
             keys.ArrowRight.pressed = false
             break
         case ' ':
-            console.log('space')
+            //console.log('space')
             break
     }
 })

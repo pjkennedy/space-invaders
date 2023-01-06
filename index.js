@@ -20,7 +20,7 @@ class Player {
         image.src = './img/spaceship.png'        
         
         image.onload = () => { 
-            const scale = 0.15
+            const scale = 0.10
             this.image = image,
             this.width = image.width * scale
             this.height = image.height * scale 
@@ -70,6 +70,57 @@ class Player {
     } //update()
 } // player() class
 
+
+class Invader {
+
+    constructor() {
+        this.velocity = {
+            x: 0,
+            y: 0
+        }
+
+        const image = new Image()
+
+        image.src = './img/invader.png'        
+        
+        image.onload = () => { 
+            const scale = 0.55
+            this.image = image,
+            this.width = image.width * scale
+            this.height = image.height * scale 
+            //this.width = 100
+            //this.height = 100
+
+            this.position = {
+                x: canvas.width / 2 - this.width / 2,
+                y: canvas.height / 2
+            }        
+        }
+    } // constructor
+
+    draw() {
+
+        c.drawImage(
+            this.image, 
+            this.position.x, 
+            this.position.y,
+            this.width, 
+            this.height)
+        
+    } //draw()
+
+    update() {
+        if (this.image) {
+            this.draw()
+            this.position.x += this.velocity.x
+            this.position.y += this.velocity.y
+        }
+    } //update()
+} // Invader() class
+
+
+
+
 class Projectile {
     constructor({ position, velocity }) {
         this.position = position
@@ -97,6 +148,7 @@ class Projectile {
 
 const player = new Player()
 const projectiles = []
+const invader = new Invader()
 
 player.update()
 
@@ -117,7 +169,8 @@ function animate() {
     requestAnimationFrame(animate)
     //console.log(sdgd)
     c.fillStyle = 'black'
-    c.fillRect(0, 0, canvas.width, canvas.height) 
+    c.fillRect(0, 0, canvas.width, canvas.height)
+    invader.update() 
     player.update()
     projectiles.forEach((projectile, index) => {
         if (projectile.position.y + projectile.radius <= 0) {

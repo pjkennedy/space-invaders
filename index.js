@@ -147,7 +147,7 @@ class Grid {
                 }}
             ))
         }
-        console.log(this.invaders) 
+        //console.log(this.invaders) 
     } // constructor
     }
 
@@ -194,8 +194,9 @@ class Projectile {
 
 const player = new Player()
 const projectiles = []
-const pos = {x:0, y:0}
-const grids = [new Grid({pos})]
+//const pos = {x:0, y:0}  //move into animate()
+//const grids = [new Grid({pos})]
+const grids = []
 
 //player.update()
 
@@ -211,6 +212,11 @@ const keys = {
     }
 
 }
+
+
+let frames = 0
+let randomInterval = Math.floor(Math.random() * 500 + 650)  
+
 
 function animate() {
     requestAnimationFrame(animate)
@@ -249,6 +255,18 @@ function animate() {
         player.velocity.x = 0
         player.rotation = 0
     }
+
+    //console.log(frames)
+    const pos = {x:0, y:0}
+    randomInterval = Math.floor(Math.random() * 500 + 666)
+    if (frames % randomInterval === 0) {
+        grids.push(new Grid({pos}))
+        frames = 0
+        console.log(randomInterval)
+
+    }
+
+    frames++
 }
 
 animate()

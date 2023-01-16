@@ -1,7 +1,9 @@
+/*  http://localhost/space-invaders/  */
 const canvas = document.querySelector('canvas')
-//console.log(canvas)
+console.log(canvas)
 const c = canvas.getContext('2d')
 
+console.log("hello")
 // added minus 5 to prevent canvas from being slightly too large, 
 // which caused it to move when using arrow keys
 canvas.width = innerWidth -5
@@ -217,7 +219,6 @@ const keys = {
 let frames = 0
 let randomInterval = Math.floor(Math.random() * 500 + 650)  
 
-
 function animate() {
     requestAnimationFrame(animate)
     //console.log(sdgd)
@@ -252,20 +253,39 @@ function animate() {
                         invader.position.x + invader.width && 
                     projectile.position.y + projectile.radius >= 
                         invader.position.y
-                    ) {
-
+                    ) {    
                     setTimeout(() => {
                         const invaderFound = grid.invaders.find(
-                            invader2 => invader2 === invader
-                            )
-                        
+                            (invader2) => invader2 === invader
+                        )
+                                                    
                         const projectileFound = projectiles.find(
-                            projectile2 => projectile2 === projectile)
-                        
+                            (projectile2) => projectile2 === projectile
+                        )
 
+                        
+                        // remove invader and projectile
                         if (invaderFound && projectileFound) {
+                            console.log("asdfasdfasdfasdfasdf")
                             grid.invaders.splice(i, 1)
                             projectiles.splice(j, 1)
+
+                            // recalculate left-side grid width 
+                            // when wiping out leftmost column     
+                            if (grid.invaders.length > 0) {
+                                
+                                
+                                const firstInvader = grid.invaders[0]
+                                const lastInvader = grid.invaders[grid.invaders.length - 1]
+
+                                grid.width = lastInvader.position.x - 
+                                    firstInvader.position.x + 
+                                    lastInvader.width
+
+                                // and right-side grid width recalculation
+                                grid.position.x = firstInvader.position.x  
+
+                            }
                         }
                     }, 0) 
                 }
@@ -303,7 +323,7 @@ addEventListener('keydown', ({key}) => {
     //console.log(key)
     switch (key) {
         case 'ArrowLeft':
-            //console.log('left')
+            console.log('left')
             keys.ArrowLeft.pressed = true
             break
         case 'ArrowRight':
